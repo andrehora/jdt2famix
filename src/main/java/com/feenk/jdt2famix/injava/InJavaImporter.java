@@ -105,8 +105,8 @@ public class InJavaImporter extends Importer {
 	private Type unknownType;
 	private UnknownVariable unknownVariable;
 	
-	private Repository repository;
-	public Repository repository() { return repository; }
+	private RepositoryJSON repository;
+	public RepositoryJSON repository() { return repository; }
 	
 	private NamedEntityAccumulator<Namespace> namespaces;
 	public NamedEntityAccumulator<Namespace> namespaces() {return namespaces;}
@@ -147,7 +147,7 @@ public class InJavaImporter extends Importer {
 		MetaRepository metaRepository = new MetaRepository();
 		FAMIXModel.importInto(metaRepository);
 		JavaModel.importInto(metaRepository);
-		repository = new Repository(metaRepository);
+		repository = new RepositoryJSON(metaRepository);
 		repository.add(new JavaSourceLanguage());
 		
 		namespaces = new NamedEntityAccumulator<Namespace>(repository);
@@ -891,7 +891,13 @@ public class InJavaImporter extends Importer {
 		}
 	}
 	
-	
+	public void exportJSON(String fileName) {
+		try {
+			repository.exportJSON(new FileWriter(fileName));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	public void logNullBinding(String string, Object extraData, int lineNumber) {
 		logger.error("unresolved " + string +

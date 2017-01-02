@@ -29,7 +29,7 @@ public class Main {
 		logger.trace("importing root folder - " + path.toString());
 		importer.run(javaFiles, classpath);
 		logger.trace("exporting - " + mseFileName);
-		importer.exportMSE(mseFileName);
+		importer.exportJSON(mseFileName);
 		logger.trace("done");
 	}
 
