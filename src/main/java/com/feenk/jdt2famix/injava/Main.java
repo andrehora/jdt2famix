@@ -21,7 +21,7 @@ public class Main {
 		else 
 			pathName = ".";
 		Path path = Paths.get(pathName).toAbsolutePath().normalize();
-		String mseFileName = path.getName(path.getNameCount() - 1) + ".mse";
+		String mseFileName = path.getName(path.getNameCount() - 1) + ".json";
 		JavaFiles javaFiles = new JavaFiles();
 		javaFiles.deepJavaFiles(path.toString());
 		Classpath classpath = new Classpath();
@@ -30,7 +30,7 @@ public class Main {
 		importer.run(javaFiles, classpath);
 		logger.trace("exporting - " + mseFileName);
 		importer.exportJSON(mseFileName);
-		logger.trace("done");
+		logger.trace("done"); 
 	}
 
 }

@@ -105,8 +105,8 @@ public class InJavaImporter extends Importer {
 	private Type unknownType;
 	private UnknownVariable unknownVariable;
 	
-	private RepositoryJSON repository;
-	public RepositoryJSON repository() { return repository; }
+	private Repository repository;
+	public Repository repository() { return repository; }
 	
 	private NamedEntityAccumulator<Namespace> namespaces;
 	public NamedEntityAccumulator<Namespace> namespaces() {return namespaces;}
@@ -147,7 +147,7 @@ public class InJavaImporter extends Importer {
 		MetaRepository metaRepository = new MetaRepository();
 		FAMIXModel.importInto(metaRepository);
 		JavaModel.importInto(metaRepository);
-		repository = new RepositoryJSON(metaRepository);
+		repository = new Repository(metaRepository);
 		repository.add(new JavaSourceLanguage());
 		
 		namespaces = new NamedEntityAccumulator<Namespace>(repository);
@@ -757,7 +757,8 @@ public class InJavaImporter extends Importer {
 		if (expression instanceof FieldAccess) {
 			FieldAccess access = (FieldAccess) expression;
 			IVariableBinding variableBinding = access.resolveFieldBinding();
-			return createAccessFromVariableBinding(variableBinding);
+			if (variableBinding != null)
+				return createAccessFromVariableBinding(variableBinding);
 		}
 		return new Access();
 	}
@@ -893,10 +894,14 @@ public class InJavaImporter extends Importer {
 	
 	public void exportJSON(String fileName) {
 		try {
-			repository.exportJSON(new FileWriter(fileName));
+			exportJSON(new FileWriter(fileName));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void exportJSON(Appendable stream) {
+		repository.accept(new JSONPrinter(stream));
 	}
 	
 	public void logNullBinding(String string, Object extraData, int lineNumber) {

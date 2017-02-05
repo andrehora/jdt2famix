@@ -26,6 +26,9 @@ import ch.akuhn.fame.internal.AbstractPrintClient;
 import ch.akuhn.util.Strings;
 
 public class JSONPrinter extends AbstractPrintClient {
+	
+private String FAMIX_LIST = "modifiers";
+private String current_attribute;
 
 private static final Format dateFormat = new SimpleDateFormat(
         "yyyy-MM-DD,hh:mm:ss");
@@ -38,6 +41,7 @@ public JSONPrinter(Appendable stream) {
 
 @Override
 public void beginAttribute(String name) {
+	current_attribute = name;
     indentation++;
     lntabs();
     append(',');
@@ -46,6 +50,9 @@ public void beginAttribute(String name) {
     append('"');
     append(':');
     append(' ');
+    if (name.equals(FAMIX_LIST)) {
+    	append('[');
+    }
 }
 
 @Override
@@ -74,6 +81,9 @@ public void beginElement(String name) {
 @Override
 public void endAttribute(String name) {
     //append(',');
+    if (name.equals(FAMIX_LIST)) {
+    	append("\"\"]");
+    }
     indentation--;
 }
 
@@ -97,12 +107,17 @@ public void primitive(Object value) {
         append('*');
     } else if (value instanceof String) {
         String string = (String) value;
+        string = string.replace("\n", " ").replace("\r", " ");
         append('"');
         for (char ch: Strings.chars(string)) {
-            if (ch == '\'' || ch == '\"') append('\\');
+            if (ch == '\"' || ch == '\\') append('\\');
             append(ch);
+            //if (ch == '\n') append("");
         }
         append('"');
+        if (current_attribute.equals(FAMIX_LIST)) {
+        	append(',');
+        }
     } else if (value instanceof Boolean || value instanceof Number) {
         append(value.toString());
     } else if (value instanceof Date) {
