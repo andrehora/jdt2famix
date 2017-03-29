@@ -514,8 +514,11 @@ public class InJavaImporter extends Importer {
 	
 	public Method ensureBasicMethod(String methodName, String signature, Type parentType, Consumer<Method> ifAbsent) {
 		String qualifiedName = Famix.qualifiedNameOf(parentType) + NAME_SEPARATOR + signature;
-		if(methods.has(qualifiedName))
-			return methods.named(qualifiedName);
+		if(methods.has(qualifiedName)) {
+			Method method = methods.named(qualifiedName);
+			ifAbsent.accept(method);
+			return method;
+		}
 		Method method = new Method();
 		method.setName(methodName);
 		methods.add(qualifiedName, method);

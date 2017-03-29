@@ -19,8 +19,9 @@ public class AstRequestor extends FileASTRequestor {
 		this.importer = importer;
 		allJavaFileCount = allJavaFiles.size();
 	}
-
+	
 	@Override
+	
 	public void acceptAST(String sourceFilePath, CompilationUnit ast) {
 		logger.trace("importing file - "
 				+ String.format("%0"+ Integer.toString(allJavaFileCount).length() + "d", ++currentFileIndex)

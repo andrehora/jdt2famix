@@ -16,12 +16,15 @@ public class Main {
 	public static void main(String[] args) {
 		InJavaImporter importer = new InJavaImporter();
 		String pathName;
+		String mseFileName = "famix_model.json";
 		if (args.length > 0)
-			pathName = args[0];
-		else 
-			pathName = ".";
+			//pathName = args[0];
+			mseFileName = args[0];
+		//else 
+		pathName = ".";
 		Path path = Paths.get(pathName).toAbsolutePath().normalize();
-		String mseFileName = path.getName(path.getNameCount() - 1) + ".json";
+		//String mseFileName = path.getName(path.getNameCount() - 1) + ".json";
+		//String mseFileName = "famix_model.json";
 		JavaFiles javaFiles = new JavaFiles();
 		javaFiles.deepJavaFiles(path.toString());
 		Classpath classpath = new Classpath();
